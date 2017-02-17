@@ -1,6 +1,5 @@
 <?php
 /*
-
 *** Suesdesign Starter Theme 1.0 ***
 */
 ?>
@@ -12,15 +11,27 @@
 	<h1>Portfolio single inplugin piece</h1>
 
 	<?php if ( have_posts () ) : while (have_posts()) : the_post(); ?>
-		<?php 
 
-		if( has_term('design', 'types' ) ){
-			$portfolio_class = 'design-single';
-		} else {
-		$portfolio_class = 'websites-single';
+<?php
+/**
+ * get the current taxonomy term
+ */
+	$terms = get_the_terms( $post->ID, 'types' );
+	if ( !empty( $terms ) ){
+		// get the first term
+		$term = array_shift( $terms );
+		$portfolio_class = $term->name;
+		$portfolio_class .= '-single';
+		echo $portfolio_class;
 	}
+// $terms = get_terms( array(
+// 'taxonomy' => 'types',
+//     'hide_empty' => false,
+// 	) );
+// 	//$portfolio_class .= '-single';
+// 	var_dump(expression);
 
- ?>
+?>
 		
 	<article class="page" id="post-<?php the_ID(); ?>">
 		<header>
@@ -40,8 +51,7 @@
 
 	<?php
 /*
-*** Suesdesign Portfolio 1.0 ***
-*   sidebar
+** sidebar ***
 */
 ?>
 
