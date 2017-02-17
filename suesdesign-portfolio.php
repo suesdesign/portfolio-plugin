@@ -115,75 +115,52 @@ class suesdesign_widget extends WP_Widget {
 	echo $args['before_title'] . $title . $args['after_title'];
 
 ?>
-<h2>Websites</h2>
-<ul>
+
 <?php
-/* loop */
+/*
+** Get the terms
+*/
 
-$loop_websites_args = array(
+$terms = get_terms( 'types', array(
+    'orderby'    => 'count',
+    'hide_empty' => 0
+) );
+
+/*
+** Run a query for each term
+*/
+
+foreach( $terms as $term ) {
+
+	// Define the query
+	$terms_args = array(
 		'posts_per_page' => '-1',
 		'post_type' => 'suesdesign_portfolio',
-		'order' => 'DESC',
-		'tax_query' => array(
-			array(
-				'taxonomy' => 'types',
-				'field'    => 'slug',
-				'terms' => 'websites',
-			),
-		),
+		'types' => $term->slug
 	);
+	$query = new WP_Query( $terms_args );
 
-	$suesdesign_portfolio = new WP_Query ( $loop_websites_args );
+	// output the term name in a heading tag                
+	echo'<h2>' . $term->name . '</h2>';
 
+	// output the post titles in a list
+	echo '<ul>';
 
-	while ( $suesdesign_portfolio->have_posts() ) : $suesdesign_portfolio->the_post(); ?>
+	// Start the Loop
+		while ( $query->have_posts() ) : $query->the_post(); ?>
 
-		
-	
-		
+		<li class="portfolio-listing" id="post-<?php the_ID(); ?>">
+			<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+		</li>
 
-			<li><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>">
-			<?php the_title(); ?>
-			</a></li>
+		<?php endwhile;
 
-      
-	<?php endwhile; wp_reset_query(); /* end loop */?>
-	</ul>
-	<h2>Design</h2>
-<ul>
+	echo '</ul>';
 
-	<?php
-/* loop */
+	// use reset postdata to restore orginal query
+	wp_reset_postdata();
 
-$loop_design_args = array(
-		'posts_per_page' => '-1',
-		'post_type' => 'suesdesign_portfolio',
-		'order' => 'DESC',
-		'tax_query' => array(
-			array(
-				'taxonomy' => 'types',
-				'field'    => 'slug',
-				'terms' => 'design',
-			),
-		),
-	);
-
-	$suesdesign_portfolio = new WP_Query ( $loop_design_args );
-
-
-	while ( $suesdesign_portfolio->have_posts() ) : $suesdesign_portfolio->the_post(); ?>
-
-		
-	
-		
-
-			<li><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>">
-			<?php the_title(); ?>
-			</a></li>
-
-      
-	<?php endwhile; wp_reset_query(); /* end loop */?>
-	</ul>
+} ?>
 
 
 

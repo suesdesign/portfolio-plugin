@@ -24,13 +24,6 @@
 		$portfolio_class .= '-single';
 		echo $portfolio_class;
 	}
-// $terms = get_terms( array(
-// 'taxonomy' => 'types',
-//     'hide_empty' => false,
-// 	) );
-// 	//$portfolio_class .= '-single';
-// 	var_dump(expression);
-
 ?>
 		
 	<article class="page" id="post-<?php the_ID(); ?>">
