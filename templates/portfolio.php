@@ -1,9 +1,8 @@
-	<div class="websites-portfolio">
-	<h2>Custom Query</h2>
+	<div class="portfolio">
 	<?php //start by fetching the terms for the types
 $terms = get_terms( 'types', array(
-    'orderby'    => 'count',
-    'hide_empty' => 0
+	'orderby'    => 'count',
+	'order'      => 'DESC'
 ) );
 ?>
 	<?php
@@ -42,8 +41,6 @@ foreach( $terms as $term ) {
 		</div>
 
 		<?php endwhile;
-
-	
 
 	// use reset postdata to restore orginal query
 	wp_reset_postdata(); ?>

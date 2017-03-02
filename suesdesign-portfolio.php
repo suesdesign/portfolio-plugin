@@ -17,6 +17,10 @@ Author URI: http://suesdesign.co.uk/
 */
 add_action( 'init', 'suesdesign_register_post' );
 
+/**
+ * Create custom post type
+ * @return type
+ */
 function suesdesign_register_post() {
 	$labels = array( 
 		'name'               => _x( 'Portfolio', 'suesdesign_portfolio' ),
@@ -37,9 +41,7 @@ function suesdesign_register_post() {
 		'public'      => true,
 		'has archive' => true,
 		'supports'    => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
-		//'taxonomies'  => array( 'category' ),
 		'rewrite'     => array( 'slug' => __( 'portfolio' ))
-
 	);
 	
 	register_post_type( 'suesdesign_portfolio', $args );
@@ -50,6 +52,11 @@ function suesdesign_register_post() {
 */	
 add_filter( 'template_include', 'suesdesign_template', 1 );
 
+/**
+ * Check to see if the template exists in the theme otherwise select the template from the plugin
+ * @param type $template_path 
+ * @return type
+ */
 function suesdesign_template( $template_path ) {
 
 	if ( is_singular( 'suesdesign_portfolio' ) ) {
@@ -67,11 +74,13 @@ function suesdesign_template( $template_path ) {
 * Sidebar
 */
 
+/**
+ * Register widgetized areas
+ * @return type
+ */
 function suesdesign__portfolio_widgets_init() {
 
-// Register widgetized areas
-
-	register_sidebar( array(
+register_sidebar( array(
 		'name'          => __( 'Portfolio', 'suesdesign_portfolio' ),
 		'id'            => 'portfolio',
 		'description'   => '',
@@ -87,12 +96,11 @@ add_action( 'widgets_init', 'suesdesign__portfolio_widgets_init' );
 /*
 ** Custom widget to display suesdesign_portfolio posts
 */
+class Suesdesign_Widget extends WP_Widget {
 
-class suesdesign_widget extends WP_Widget {
-
-	/**
-	 * Sets up the widgets name etc
-	 */
+/**
+ * Sets up the widgets name etc
+ */
 	public function __construct() {
 		$suesdesign_widget = array( 
 			'classname' => 'portfolio-widget',
@@ -101,12 +109,12 @@ class suesdesign_widget extends WP_Widget {
 		parent::__construct( 'suesdesign_portfolio_widget', 'Portfolio Widget', 'suesdesign_widget' );
 	}
 
-	/**
-	 * Outputs the content of the widget
-	 *
-	 * @param array $args
-	 * @param array $instance
-	 */
+/**
+ * Outputs the content of the widget
+ *
+ * @param array $args
+ * @param array $instance
+ */
 	public function widget( $args, $instance ) {
 		// outputs the content of the widget
 		$title = apply_filters( 'widget_title', $instance['title'] );
@@ -120,16 +128,14 @@ class suesdesign_widget extends WP_Widget {
 /*
 ** Get the terms
 */
-
 $terms = get_terms( 'types', array(
-    'orderby'    => 'count',
-    'hide_empty' => 0
+	'orderby'    => 'count',
+	'order'      => 'DESC'
 ) );
 
 /*
 ** Run a query for each term
 */
-
 foreach( $terms as $term ) {
 
 	// Define the query
@@ -141,7 +147,7 @@ foreach( $terms as $term ) {
 	$query = new WP_Query( $terms_args );
 
 	// output the term name in a heading tag                
-	echo'<h2>' . $term->name . '</h2>';
+	echo'<h3>' . $term->name . '</h3>';
 
 	// output the post titles in a list
 	echo '<ul>';
@@ -149,7 +155,15 @@ foreach( $terms as $term ) {
 	// Start the Loop
 		while ( $query->have_posts() ) : $query->the_post(); ?>
 
-		<li class="portfolio-listing" id="post-<?php the_ID(); ?>">
+		<li class="portfolio-listing <?php //$item = the_title();
+		$post_title = get_queried_object()->post_title;
+		$title_menu = get_the_title();
+		if ($post_title === $title_menu) {
+			echo 'current-item';
+		} ?>" id="post-<?php the_ID(); ?>"
+		
+		>
+		
 			<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 		</li>
 
@@ -157,23 +171,19 @@ foreach( $terms as $term ) {
 
 	echo '</ul>';
 
-	// use reset postdata to restore orginal query
 	wp_reset_postdata();
 
 } ?>
 
+<?php echo $args['after_widget'];
 
+}
 
-	<?php echo $args['after_widget'];
-
-	}
-	
-
-	/**
-	 * Outputs the options form on admin
-	 *
-	 * @param array $instance The widget options
-	 */
+/**
+ * Outputs the options form on admin
+ *
+ * @param array $instance The widget options
+ */
 	public function form( $instance ) {
 		// outputs the options form on admin
 		if ( isset( $instance[ 'title' ] ) ) {
@@ -190,12 +200,12 @@ foreach( $terms as $term ) {
 	
 	}
 
-	/**
-	 * Processing widget options on save
-	 *
-	 * @param array $new_instance The new options
-	 * @param array $old_instance The previous options
-	 */
+/**
+ * Processing widget options on save
+ *
+ * @param array $new_instance The new options
+ * @param array $old_instance The previous options
+ */
 	public function update( $new_instance, $old_instance ) {
 	$instance = array();
 	$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
@@ -215,6 +225,10 @@ add_action( 'widgets_init', 'register_suesdesign_widget' );
 
 add_action( 'init', 'suesdesign_create_taxonomy', 0 );
 
+/**
+ * Create taxonomy
+ * @return type
+ */
 function suesdesign_create_taxonomy() {
 
 // Labels part for the GUI
@@ -250,10 +264,11 @@ function suesdesign_create_taxonomy() {
   ));
 }
 
-/*
-** Portfolio shortcode
-*/
 
+/**
+ * Create a shortcode for the poertfolio
+ * @return type
+ */
 function suesdesign_portfolio_shortcode(){
 // Buffer the output so it doesn't appear at the top of the page
 	ob_start();
@@ -268,4 +283,12 @@ function suesdesign_register_shortcodes(){
 };
 
 add_action( 'init', 'suesdesign_register_shortcodes' );
+
+/*
+** Single portfolio items shortcode
+*/
+function suesdesign_portfolio_piece_shortcode( $atts, $content = null ) {
+	return '<div class="portfolio-piece">' . $content . '</div>';
+}
+add_shortcode( 'portfolio-piece', 'suesdesign_portfolio_piece_shortcode' );
 

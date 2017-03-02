@@ -8,8 +8,6 @@
 
 	<main id="maincontent" class="column2">
 
-	<h1>Portfolio single inplugin piece</h1>
-
 	<?php if ( have_posts () ) : while (have_posts()) : the_post(); ?>
 
 <?php
@@ -20,9 +18,8 @@
 	if ( !empty( $terms ) ){
 		// get the first term
 		$term = array_shift( $terms );
-		$portfolio_class = $term->name;
+		$portfolio_class = $term->slug;
 		$portfolio_class .= '-single';
-		echo $portfolio_class;
 	}
 ?>
 		
@@ -48,7 +45,7 @@
 */
 ?>
 
-<div class="column1" id="portfolio">
+<div id="portfolio-sidebar">
 	<aside>
 <?php
 	if ( is_active_sidebar( 'portfolio' ) ) : ?>
