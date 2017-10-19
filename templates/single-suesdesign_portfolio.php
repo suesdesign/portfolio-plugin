@@ -12,7 +12,7 @@
 
 <?php
 /**
- * get the current taxonomy term
+ * Get the current taxonomy term
  */
 	$terms = get_the_terms( $post->ID, 'types' );
 	if ( !empty( $terms ) ){

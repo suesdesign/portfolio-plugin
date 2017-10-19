@@ -1,15 +1,23 @@
 	<div class="portfolio">
-	<?php //start by fetching the terms for the types
+	<?php 
+
+/**
+ * Fetch the terms for the types
+ */
 $terms = get_terms( 'types', array(
-	'orderby'    => 'count',
+	'orderby'    => 'title',
 	'order'      => 'DESC'
 ) );
 ?>
 	<?php
-// now run a query for each type
+/**
+ * Run a query for each type
+ */
 foreach( $terms as $term ) {
 
-	// Define the query
+/**
+ * Define the query
+ */ 
 	$args = array(
 		'posts_per_page' => '-1',
 		'post_type' => 'suesdesign_portfolio',
@@ -20,16 +28,23 @@ foreach( $terms as $term ) {
 	$term_slug = $term->slug;
 	$class_name = $term_slug . '-portfolio';
 
-	// output the term name in a heading tag                
+/**
+ * Output the term name in a heading tag
+ */             
 	echo'<h2>' . $term_name . '</h2>';
 	?>
 
 	<div class="<?php echo $class_name; ?>">
 	 
-	<?php // output the post titles in a list
-	
+	<?php
 
-		// Start the Loop
+/**
+ * Output the post titles in a list
+ */
+	
+/**
+ * Start the Loop
+ */ 
 		while ( $query->have_posts() ) : $query->the_post(); ?>
 
 		<div class="<?php echo $term_slug; ?>">
@@ -42,7 +57,9 @@ foreach( $terms as $term ) {
 
 		<?php endwhile;
 
-	// use reset postdata to restore orginal query
+/**
+ * Use reset postdata to restore orginal query
+ */
 	wp_reset_postdata(); ?>
 	</div>
 

@@ -4,22 +4,21 @@
  * @version 1.0
  */
 /*
-Plugin Name: Suesdesign portfolio
-Plugin URI: http://suesdesign.co.uk/
+Plugin Name: Suesdesign Portfolio
+Plugin URI: https://suesdesign.co.uk/
 Description: Portfolio
 Author: Sue Johnson
 Version: 1.0
-Author URI: http://suesdesign.co.uk/
+Author URI: https://suesdesign.co.uk/
 */
 
 /*
  * Register custom post type
-*/
+ */
 add_action( 'init', 'suesdesign_register_post' );
 
 /**
  * Create custom post type
- * @return type
  */
 function suesdesign_register_post() {
 	$labels = array( 
@@ -71,12 +70,11 @@ function suesdesign_template( $template_path ) {
 }
 
 /**
-* Sidebar
-*/
+ * Sidebar
+ */
 
 /**
  * Register widgetized areas
- * @return type
  */
 function suesdesign__portfolio_widgets_init() {
 
@@ -86,8 +84,8 @@ register_sidebar( array(
 		'description'   => '',
 		'before_widget' => '<aside id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</aside>',
-		'before_title'  => '<h3 class="widget-title">',
-		'after_title'   => '</h3>'
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => '</h2>'
 	) );
 
 }
@@ -112,8 +110,6 @@ class Suesdesign_Widget extends WP_Widget {
 /**
  * Outputs the content of the widget
  *
- * @param array $args
- * @param array $instance
  */
 	public function widget( $args, $instance ) {
 		// outputs the content of the widget
@@ -129,7 +125,7 @@ class Suesdesign_Widget extends WP_Widget {
 ** Get the terms
 */
 $terms = get_terms( 'types', array(
-	'orderby'    => 'count',
+	'orderby'    => 'title',
 	'order'      => 'DESC'
 ) );
 
@@ -146,10 +142,10 @@ foreach( $terms as $term ) {
 	);
 	$query = new WP_Query( $terms_args );
 
-	// output the term name in a heading tag                
+	// Output the term name in a heading tag                
 	echo'<h3>' . $term->name . '</h3>';
 
-	// output the post titles in a list
+	// Output the post titles in a list
 	echo '<ul>';
 
 	// Start the Loop
@@ -182,15 +178,15 @@ foreach( $terms as $term ) {
 /**
  * Outputs the options form on admin
  *
- * @param array $instance The widget options
  */
 	public function form( $instance ) {
-		// outputs the options form on admin
+	// Outputs the options form on admin
 		if ( isset( $instance[ 'title' ] ) ) {
 	$title = $instance[ 'title' ];
 	} else {
 	$title = __( 'Portfolio', 'suesdesign_widget' );
-	}// Widget admin form
+	}
+	// Widget admin form
 	?>
 	<p>
 	<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
@@ -203,8 +199,6 @@ foreach( $terms as $term ) {
 /**
  * Processing widget options on save
  *
- * @param array $new_instance The new options
- * @param array $old_instance The previous options
  */
 	public function update( $new_instance, $old_instance ) {
 	$instance = array();
@@ -221,14 +215,9 @@ add_action( 'widgets_init', 'register_suesdesign_widget' );
 /*
 ** Create custom taxonomy
 */
-// hook into the init action and call suesdesign_create_taxonomy when it fires
 
 add_action( 'init', 'suesdesign_create_taxonomy', 0 );
 
-/**
- * Create taxonomy
- * @return type
- */
 function suesdesign_create_taxonomy() {
 
 // Labels part for the GUI
@@ -266,8 +255,7 @@ function suesdesign_create_taxonomy() {
 
 
 /**
- * Create a shortcode for the poertfolio
- * @return type
+ * Create a shortcode for the portfolio
  */
 function suesdesign_portfolio_shortcode(){
 // Buffer the output so it doesn't appear at the top of the page
