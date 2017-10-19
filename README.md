@@ -33,5 +33,5 @@ Add or select the type of portfolio piece from types.
 Place the Portfolio Widget on the sidebar where you want the list of items from the portfolio to appear.
 
 
-The plugin can be seen in use at at: https://.suesdesign.co.uk
+The plugin can be seen in use at at: https://suesdesign.co.uk
 
