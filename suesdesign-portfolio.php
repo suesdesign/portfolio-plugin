@@ -280,3 +280,15 @@ function suesdesign_portfolio_piece_shortcode( $atts, $content = null ) {
 }
 add_shortcode( 'portfolio-piece', 'suesdesign_portfolio_piece_shortcode' );
 
+/* 
+ * Flush permalinks on plugin activation
+*/
+
+register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
+register_activation_hook( __FILE__, 'suesdesign_portfolio_flush_rewrites' );
+function suesdesign_portfolio_flush_rewrites() {
+	// call the registration function
+	suesdesign_register_post();
+	flush_rewrite_rules();
+}
+
